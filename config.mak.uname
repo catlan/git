@@ -57,6 +57,7 @@ ifeq ($(uname_S),Linux)
 	HAVE_CLOCK_GETTIME = YesPlease
 	HAVE_CLOCK_MONOTONIC = YesPlease
 	HAVE_SYNC_FILE_RANGE = YesPlease
+	HAVE_FICLONE = YesPlease
 	HAVE_GETDELIM = YesPlease
 	FREAD_READS_DIRECTORIES = UnfortunatelyYes
 	HAVE_SYSINFO = YesPlease
@@ -158,6 +159,7 @@ ifeq ($(uname_S),Darwin)
 	HAVE_BSD_SYSCTL = YesPlease
 	FREAD_READS_DIRECTORIES = UnfortunatelyYes
 	HAVE_NS_GET_EXECUTABLE_PATH = YesPlease
+	HAVE_CLONEFILE = YesPlease
 	CSPRNG_METHOD = arc4random
 	USE_ENHANCED_BASIC_REGULAR_EXPRESSIONS = YesPlease
 	HAVE_PLATFORM_PROCINFO = YesPlease

@@ -343,6 +343,10 @@ include shared.mak
 #
 # Define HAVE_SYNC_FILE_RANGE if your platform has sync_file_range.
 #
+# Define HAVE_CLONEFILE if your platform has fclonefileat() (macOS), or
+# HAVE_FICLONE if it has the FICLONE ioctl (Linux), to create copy-on-write
+# clones of files where the file system supports it.
+#
 # Define HAVE_BSD_SYSCTL if your platform has a BSD-compatible sysctl function.
 #
 # Define HAVE_GETDELIM if your system has the getdelim() function.
@@ -856,6 +860,7 @@ TEST_BUILTINS_OBJS += test-read-graph.o
 TEST_BUILTINS_OBJS += test-read-midx.o
 TEST_BUILTINS_OBJS += test-ref-store.o
 TEST_BUILTINS_OBJS += test-reftable.o
+TEST_BUILTINS_OBJS += test-reflink.o
 TEST_BUILTINS_OBJS += test-regex.o
 TEST_BUILTINS_OBJS += test-rot13-filter.o
 TEST_BUILTINS_OBJS += test-repository.o
@@ -2306,6 +2311,14 @@ endif
 
 ifdef HAVE_SYNC_FILE_RANGE
 	BASIC_CFLAGS += -DHAVE_SYNC_FILE_RANGE
+endif
+
+ifdef HAVE_CLONEFILE
+	BASIC_CFLAGS += -DHAVE_CLONEFILE
+endif
+
+ifdef HAVE_FICLONE
+	BASIC_CFLAGS += -DHAVE_FICLONE
 endif
 
 ifdef HAVE_SYSINFO

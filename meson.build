@@ -1511,6 +1511,12 @@ if compiler.has_function('sync_file_range')
   libgit_c_args += '-DHAVE_SYNC_FILE_RANGE'
 endif
 
+if compiler.has_function('fclonefileat', prefix: '#include <sys/clonefile.h>')
+  libgit_c_args += '-DHAVE_CLONEFILE'
+elif compiler.has_header_symbol('linux/fs.h', 'FICLONE')
+  libgit_c_args += '-DHAVE_FICLONE'
+endif
+
 if not compiler.has_function('strdup')
   libgit_c_args += '-DOVERRIDE_STRDUP'
   compat_sources += 'compat/strdup.c'

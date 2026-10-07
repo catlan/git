@@ -53,6 +53,7 @@ test_tool_sources = [
   'test-read-midx.c',
   'test-ref-store.c',
   'test-reftable.c',
+  'test-reflink.c',
   'test-regex.c',
   'test-repository.c',
   'test-revision-walking.c',
