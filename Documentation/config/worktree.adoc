@@ -9,6 +9,18 @@
 	fails.  If no such match can be found, it falls back to
 	creating a new branch from the current `HEAD`.
 
+`worktree.reflink`::
+	When creating a new worktree, `git worktree add` populates it
+	with copy-on-write clones ("reflinks") of those files of the
+	current worktree whose contents are exactly what checking out
+	the commit would write, if the file system supports cloning
+	(APFS on macOS; Btrfs, XFS and bcachefs on Linux). A clone shares
+	its storage with the original until one of them is modified, so
+	the new worktree takes next to no additional disk space, and is
+	faster to create. Cloned files keep the modification time of the
+	original and, on macOS, its extended attributes. Set this to
+	"`false`" to always write every file anew. Defaults to "`true`".
+
 `worktree.useRelativePaths`::
 	Link worktrees using relative paths (when "`true`") or absolute
 	paths (when "`false`"). This is particularly useful for setups

@@ -130,6 +130,7 @@ static int show_only;
 static int verbose;
 static int guess_remote;
 static int use_relative_paths;
+static int use_reflink = 1;
 static timestamp_t expire;
 
 static int git_worktree_config(const char *var, const char *value,
@@ -140,6 +141,9 @@ static int git_worktree_config(const char *var, const char *value,
 		return 0;
 	} else if (!strcmp(var, "worktree.userelativepaths")) {
 		use_relative_paths = git_config_bool(var, value);
+		return 0;
+	} else if (!strcmp(var, "worktree.reflink")) {
+		use_reflink = git_config_bool(var, value);
 		return 0;
 	}
 
@@ -402,6 +406,13 @@ static int checkout_worktree(const struct add_opts *opts,
 	strvec_pushl(&cp.args, "reset", "--hard", "--no-recurse-submodules", NULL);
 	if (opts->quiet)
 		strvec_push(&cp.args, "--quiet");
+	/*
+	 * Files that are the same in the current worktree need not be
+	 * written anew; the file system may be able to clone them.
+	 */
+	if (use_reflink && the_repository->worktree)
+		strvec_pushf(&cp.args, "--reflink-source=%s",
+			     the_repository->worktree);
 	strvec_pushv(&cp.env, child_env->v);
 	return run_command(&cp);
 }

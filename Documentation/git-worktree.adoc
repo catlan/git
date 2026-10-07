@@ -70,6 +70,12 @@ is linked to the current repository, sharing everything except per-worktree
 files such as `HEAD`, `index`, etc. As a convenience, _<commit-ish>_ may
 be a bare "`-`", which is synonymous with `@{-1}`.
 +
+On file systems that can clone files (see `worktree.reflink` in
+linkgit:git-config[1]), files of the current worktree whose contents are
+identical to what checking out _<commit-ish>_ would write are cloned into
+the new worktree instead of being written from the repository, and share
+their storage with the originals until either copy is modified.
++
 If _<commit-ish>_ is a branch name (call it _<branch>_) and is not found,
 and neither `-b` nor `-B` nor `--detach` are used, but there does
 exist a tracking branch in exactly one remote (call it _<remote>_)
