@@ -2060,3 +2060,11 @@ enum conv_attrs_classification classify_conv_attrs(const struct conv_attrs *ca)
 
 	return CA_CLASS_STREAMABLE;
 }
+
+int conv_attrs_checkout_is_passthrough(const struct conv_attrs *ca)
+{
+	return !ca->drv &&
+	       !ca->ident &&
+	       !ca->working_tree_encoding &&
+	       output_eol(ca->crlf_action) != EOL_CRLF;
+}

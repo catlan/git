@@ -237,4 +237,13 @@ enum conv_attrs_classification {
 enum conv_attrs_classification classify_conv_attrs(
 	const struct conv_attrs *ca);
 
+/*
+ * Return true if convert_to_working_tree() writes blobs verbatim for a
+ * path with these attributes, i.e. no smudge filter, ident expansion,
+ * working tree encoding or LF to CRLF conversion applies to it. (The
+ * other direction may still differ: convert_to_git() may normalize line
+ * endings of such a path.)
+ */
+int conv_attrs_checkout_is_passthrough(const struct conv_attrs *ca);
+
 #endif /* CONVERT_H */

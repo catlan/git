@@ -19,6 +19,7 @@
 #include "refs.h"
 #include "attr.h"
 #include "read-cache.h"
+#include "reflink-checkout.h"
 #include "split-index.h"
 #include "sparse-index.h"
 #include "submodule.h"
@@ -481,6 +482,9 @@ static int check_updates(struct unpack_trees_options *o,
 		prefetch_cache_entries(index, must_checkout, NULL);
 
 	get_parallel_checkout_configs(&pc_workers, &pc_threshold);
+
+	if (o->reflink_source)
+		reflink_checkout_entries(&state, index, o->reflink_source);
 
 	enable_delayed_checkout(&state);
 	if (pc_workers > 1)

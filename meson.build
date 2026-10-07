@@ -481,6 +481,7 @@ libgit_sources = [
   'rebase.c',
   'ref-filter.c',
   'reflog-walk.c',
+  'reflink-checkout.c',
   'reflog.c',
   'refs.c',
   'refs/debug.c',

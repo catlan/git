@@ -59,7 +59,8 @@ static inline int is_merge(void)
 	return !access(git_path_merge_head(the_repository), F_OK);
 }
 
-static int reset_index(const char *ref, const struct object_id *oid, int reset_type, int quiet)
+static int reset_index(const char *ref, const struct object_id *oid, int reset_type,
+		       int quiet, const char *reflink_source)
 {
 	int i, nr = 0;
 	struct tree_desc desc[2];
@@ -73,6 +74,7 @@ static int reset_index(const char *ref, const struct object_id *oid, int reset_t
 	opts.dst_index = the_repository->index;
 	opts.fn = oneway_merge;
 	opts.merge = 1;
+	opts.reflink_source = reflink_source;
 	init_checkout_metadata(&opts.meta, ref, oid, NULL);
 	if (!quiet)
 		opts.verbose_update = 1;
@@ -338,6 +340,7 @@ int cmd_reset(int argc,
 	      const char *prefix,
 	      struct repository *repo UNUSED)
 {
+	const char *reflink_source = NULL;
 	int reset_type = NONE, update_ref_status = 0, quiet = 0;
 	int no_refresh = 0;
 	int patch_mode = 0, pathspec_file_nul = 0, unborn;
@@ -379,6 +382,9 @@ int cmd_reset(int argc,
 				N_("record only the fact that removed paths will be added later")),
 		OPT_PATHSPEC_FROM_FILE(&pathspec_from_file),
 		OPT_PATHSPEC_FILE_NUL(&pathspec_file_nul),
+		OPT_STRING_F(0, "reflink-source", &reflink_source, N_("dir"),
+			     N_("clone identical files from this checkout"),
+			     PARSE_OPT_HIDDEN),
 		OPT_END()
 	};
 
@@ -519,9 +525,11 @@ int cmd_reset(int argc,
 			if (ref && !starts_with(ref, "refs/"))
 				FREE_AND_NULL(ref);
 
-			err = reset_index(ref, &oid, reset_type, quiet);
+			err = reset_index(ref, &oid, reset_type, quiet,
+					  reflink_source);
 			if (reset_type == KEEP && !err)
-				err = reset_index(ref, &oid, MIXED, quiet);
+				err = reset_index(ref, &oid, MIXED, quiet,
+						  reflink_source);
 			if (err)
 				die(_("Could not reset index file to revision '%s'."), rev);
 			free(ref);

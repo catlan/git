@@ -59,6 +59,12 @@ void unlink_entry(const struct cache_entry *ce, const char *super_prefix);
 
 void *read_blob_entry(const struct cache_entry *ce, size_t *size);
 int fstat_checkout_output(int fd, const struct checkout *state, struct stat *st);
+/*
+ * Create the leading directories of `path` (of length `path_len`) in the
+ * working tree, removing anything in the way if state->force is set.
+ */
+void create_directories(const char *path, int path_len,
+			const struct checkout *state);
 void update_ce_after_write(const struct checkout *state, struct cache_entry *ce,
 			   struct stat *st);
 

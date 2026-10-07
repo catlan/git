@@ -74,6 +74,12 @@ struct unpack_trees_options {
 	enum unpack_trees_reset_type reset;
 	const char *prefix;
 	const char *super_prefix;
+	/*
+	 * Another checkout of the repository whose files are cloned
+	 * (reflinked) rather than written when identical to what is being
+	 * checked out, see reflink_checkout_entries().
+	 */
+	const char *reflink_source;
 	struct pathspec *pathspec;
 	merge_fn_t fn;
 
